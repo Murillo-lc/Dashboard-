@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard com Chart.JS</title>
+<!-- Adicione o link para a biblioteca Chart.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  /* Adicione estilos CSS conforme necessário */
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+  }
+  .kpi-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  .kpi-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Dashboard</h1>
+  <div class="kpi-container">
+    <div class="kpi-box">
+      <h3>Média de Umidade do Mês</h3>
+      <p id="avgHumidity"></p>
+    </div>
+    <div class="kpi-box">
+      <h3>Média de Temperatura do Mês</h3>
+      <p id="avgTemperature"></p>
+    </div>
+  </div>
+  <div class="chart-container">
+    <canvas id="lineChart"></canvas>
+  </div>
+  <div class="chart-container">
+    <canvas id="barChart"></canvas>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Dados para o gráfico de linhas
+    var lineData = {
+      labels: ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
+      datasets: [{
+        label: "Temperatura",
+        borderColor: "rgb(75, 192, 192)",
+        data: [30, 29, 28, 25, 22, 23]
+      }, {
+        label: "Umidade",
+        borderColor: "rgb(255, 99, 132)",
+        data: [80, 82, 80, 85, 80, 83]
+      }]
+    };
+
+    // Opções para o gráfico de linhas
+    var lineOptions = {
+      responsive: true,
+      maintainAspectRatio: false
+    };
+
+    // Dados para o gráfico de barras
+    var barData = {
+      labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho"],
+      datasets: [{
+        label: "Temperatura",
+        backgroundColor: "rgb(75, 192, 192)",
+        data: [22, 24, 27, 23, 20, 18]
+      }, {
+        label: "Umidade",
+        backgroundColor: "rgb(255, 99, 132)",
+        data: [90, 89, 93, 87, 88, 82]
+      }]
+    };
+
+    // Opções para o gráfico de barras
+    var barOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        xAxes: [{
+          stacked: true
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    };
+
+    // Criação dos gráficos
+    var lineChart = new Chart(document.getElementById('lineChart'), {
+      type: 'line',
+      data: lineData,
+      options: lineOptions
+    });
+
+    var barChart = new Chart(document.getElementById('barChart'), {
+      type: 'bar',
+      data: barData,
+      options: barOptions
+    });
+
+    // Cálculo da média de umidade do mês
+    var avgHumidity = barData.datasets[1].data.reduce((a, b) => a + b, 0) / barData.datasets[1].data.length;
+    document.getElementById('avgHumidity').innerText = avgHumidity.toFixed(2);
+
+    // Cálculo da média de temperatura do mês
+    var avgTemperature = barData.datasets[0].data.reduce((a, b) => a + b, 0) / barData.datasets[0].data.length;
+    document.getElementById('avgTemperature').innerText = avgTemperature.toFixed(2);
+  });
+</script>
+</body>
+</html>
